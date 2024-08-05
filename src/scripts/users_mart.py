@@ -85,7 +85,7 @@ def get_cities(events_with_timezone_df: DataFrame) -> DataFrame:
 
     home_city = (
         user_cities_df
-        .filter("rank == 1 or days_diff > 27")
+        .filter("rank == 1 or days_diff > 27")  # если не найдется город, в котором пользователь был > 27д, домашним считаем первый город
         .withColumn("hc_rank", F.row_number().over(
             Window.partitionBy('user_id').orderBy(F.col('date').desc(), F.col('city').desc())))
         .filter("hc_rank == 1")
